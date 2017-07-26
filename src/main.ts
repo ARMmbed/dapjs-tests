@@ -103,21 +103,37 @@ class DAPTest {
             },
         ];
 
+        let pass = 0;
+        let fail = 0;
+        let skip = 0;
+        let error = 0;
+
         for (const test of tests) {
+            if (this.deviceCode == '9900' && test.name == 'hw-bkpt-test') {
+                this.log('[skip] hw-bkpt-test is not applicable on the NRF51');
+                skip++;
+                continue;
+            }
+
             try {
                 console.log(this.target);
                 const result = await test.func();
 
                 if (result) {
                     this.log(`[pass] ${test.name}`);
+                    pass++;
                 } else {
-                    this.log(`[fail] ${test.name}`)
+                    this.log(`[fail] ${test.name}`);
+                    fail++;
                 }
             } catch (e) {
                 this.log(`[error] ${test.name}: ${e}`);
-                throw e;
+                error++;
+                return;
             }
         }
+
+        this.log(`${pass} tests passed out of ${pass+fail}`);
     }
 
     private registerTest = async () => {
@@ -274,6 +290,9 @@ class DAPTest {
         return true;
     }
 
+    /**
+     * Note: THIS TEST DOES NOT WORK ON THE NRF51 - IT HAS NO RAM REGIONS < 0x20000000
+     */
     private hwBreakpointTest = async () => {
         const code = Array(100).fill("nop");
         code.push('bkpt #3');
@@ -297,7 +316,7 @@ class DAPTest {
     }
 
     private log(s: string) {
-        this.logger.log("[test] " + s);
+        this.logger.log(s);
     }
 
     private clearLog() {

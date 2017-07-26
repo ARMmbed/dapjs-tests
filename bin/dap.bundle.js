@@ -328,7 +328,7 @@ var DAPTest = (function () {
          * the source of the click event.
          */
         this.connect = function () { return __awaiter(_this, void 0, void 0, function () {
-            var _a, imp, isa, type, elements, _i, elements_1, elem, tests, _b, tests_1, test, result, e_1;
+            var _a, imp, isa, type, elements, _i, elements_1, elem, tests, pass, fail, skip, error, _b, tests_1, test, result, e_1;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
@@ -379,11 +379,20 @@ var DAPTest = (function () {
                                 func: this.hwBreakpointTest,
                             },
                         ];
+                        pass = 0;
+                        fail = 0;
+                        skip = 0;
+                        error = 0;
                         _b = 0, tests_1 = tests;
                         _c.label = 5;
                     case 5:
                         if (!(_b < tests_1.length)) return [3 /*break*/, 10];
                         test = tests_1[_b];
+                        if (this.deviceCode == '9900' && test.name == 'hw-bkpt-test') {
+                            this.log('[skip] hw-bkpt-test is not applicable on the NRF51');
+                            skip++;
+                            return [3 /*break*/, 9];
+                        }
                         _c.label = 6;
                     case 6:
                         _c.trys.push([6, 8, , 9]);
@@ -393,19 +402,24 @@ var DAPTest = (function () {
                         result = _c.sent();
                         if (result) {
                             this.log("[pass] " + test.name);
+                            pass++;
                         }
                         else {
                             this.log("[fail] " + test.name);
+                            fail++;
                         }
                         return [3 /*break*/, 9];
                     case 8:
                         e_1 = _c.sent();
                         this.log("[error] " + test.name + ": " + e_1);
-                        throw e_1;
+                        error++;
+                        return [2 /*return*/];
                     case 9:
                         _b++;
                         return [3 /*break*/, 5];
-                    case 10: return [2 /*return*/];
+                    case 10:
+                        this.log(pass + " tests passed out of " + (pass + fail));
+                        return [2 /*return*/];
                 }
             });
         }); };
@@ -612,6 +626,9 @@ var DAPTest = (function () {
                 }
             });
         }); };
+        /**
+         * Note: THIS TEST DOES NOT WORK ON THE NRF51 - IT HAS NO RAM REGIONS < 0x20000000
+         */
         this.hwBreakpointTest = function () { return __awaiter(_this, void 0, void 0, function () {
             var code, programAddress, breakAddress, machine, machineArray, pc;
             return __generator(this, function (_a) {
@@ -651,7 +668,7 @@ var DAPTest = (function () {
         this.logger = logger;
     }
     DAPTest.prototype.log = function (s) {
-        this.logger.log("[test] " + s);
+        this.logger.log(s);
     };
     DAPTest.prototype.clearLog = function () {
         this.logger.clear();
@@ -1105,7 +1122,7 @@ var CortexM = (function () {
                         _a.sent();
                         return [4 /*yield*/, this.debug.enable()];
                     case 3:
-                        _a.sent(); // really??
+                        _a.sent();
                         _a.label = 4;
                     case 4: return [2 /*return*/];
                 }
