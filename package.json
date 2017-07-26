@@ -1,0 +1,44 @@
+{
+  "name": "dapjs-tests",
+  "version": "1.0.0",
+  "description": "Tests for dap.js running with WebUSB",
+  "main": "index.js",
+  "scripts": {
+    "test": "karma start",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matthewelse/dapjs-tests.git"
+  },
+  "keywords": [
+    "dap",
+    "js",
+    "test"
+  ],
+  "author": "Matthew Else <matthew.else@arm.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/matthewelse/dapjs-tests/issues"
+  },
+  "homepage": "https://github.com/matthewelse/dapjs-tests#readme",
+  "dependencies": {
+    "dapjs": "github:matthewelse/dapjs",
+    "dapjs-targets": "github:matthewelse/dapjs-targets",
+    "thumb-assembler": "github:matthewelse/ts-thumb-assembler",
+    "webhid": "github:matthewelse/webhid"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.41",
+    "chai": "^4.1.0",
+    "karma": "^1.7.0",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-mocha": "^1.3.0",
+    "karma-webpack": "^2.0.4",
+    "mocha": "^3.4.2",
+    "ts-loader": "^2.3.1",
+    "typescript": "^2.4.2",
+    "webpack": "^3.4.1"
+  }
+}
